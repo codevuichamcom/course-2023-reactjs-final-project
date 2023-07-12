@@ -1,15 +1,14 @@
-import React from "react";
 import { Outlet } from "react-router-dom";
-import { Footer, NavBar } from "src/components";
+import { ToastContainer } from "react-toastify";
+import { Footer, Header } from "src/components";
 
-const Layout = () => {
+export const Layout = () => {
   return (
     <>
-      <NavBar />
+      <Header />
       <Outlet />
       <Footer />
+      <ToastContainer />
     </>
   );
 };
-
-export default Layout;

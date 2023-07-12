@@ -1,7 +1,8 @@
-import Banner from "./Banner/Banner";
-import Footer from "./Footer/Footer";
-import NavBar from "./NavBar/NavBar";
-import ProductList from "./ProductList/ProductList";
-import Slide from "./Slide/Slide";
-
-export { Banner, Footer, NavBar, ProductList, Slide };
+export { BannerPath } from "./BannerPath/BannerPath";
+export { Footer } from "./Footer/Footer";
+export { Header } from "./Header/Header";
+export { ProductCard } from "./ProductCard/ProductCard";
+export { ProductList } from "./ProductList/ProductList";
+export { SelectBoxCustom } from "./SelectBoxCustom/SelectBoxCustom";
+export { Comment } from "./Comment/Comment";
+export { StarList } from "./StarList/StarList";

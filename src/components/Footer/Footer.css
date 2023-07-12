@@ -1,4 +1,8 @@
 .footer {
-  background-color: lightgray;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  color: #fff;
+  background-color: #002347;
 }
