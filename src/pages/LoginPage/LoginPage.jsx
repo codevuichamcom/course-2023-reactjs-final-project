@@ -13,9 +13,13 @@ import { useState } from "react";
 import { axiosClient } from "src/axios/AxiosClient";
 import { useNavigate } from "react-router-dom";
 import { BannerPath } from "src/components";
+import { useDispatch } from "react-redux";
+import { setLoggedInAccount } from "src/app/feature/account/AccountSlice";
+import { toast } from "react-toastify";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -26,9 +30,12 @@ export const LoginPage = () => {
   };
 
   const handleLogin = async () => {
-    const { data } = await axiosClient.post("/login", formData);
-    const { accessToken } = data;
+    const { data, err } = await axiosClient.post("/login", formData);
+    const { accessToken, account } = data;
     localStorage.setItem("accessToken", accessToken);
+    dispatch(setLoggedInAccount(account));
+    navigate("/home");
+    toast.success("Login success!");
   };
   return (
     <>
