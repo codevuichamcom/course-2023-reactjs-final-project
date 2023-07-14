@@ -13,23 +13,23 @@ import { NotFound } from "src/pages/NotFound/NotFound";
 import { RegisterPage } from "src/pages/RegisterPage";
 import { Provider } from "react-redux";
 import { store } from "src/app/store";
+import { PrivateRoute } from "./pages/PrivateRoute";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="home" index element={<HomePage />} />
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="home" index element={<HomePage />} />
+          <Route path="product-detail" element={<ProductDetailPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="/" element={<PrivateRoute />}>
             <Route path="shop-category" element={<ShopCategoryPage />} />
-            <Route path="product-detail" element={<ProductDetailPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
-            <Route path="" element={<Navigate to="/home" replace />} />
-            <Route path="*" element={<NotFound />} />
           </Route>
-        </Routes>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </Provider>
 );
