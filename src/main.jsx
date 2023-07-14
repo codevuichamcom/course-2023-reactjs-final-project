@@ -1,35 +1,26 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import "src/global.css";
-import "react-toastify/dist/ReactToastify.css";
-import { HomePage } from "src/pages/HomePage";
-import { ShopCategoryPage } from "src/pages/ShopCategoryPage";
-import { ProductDetailPage } from "src/pages/ProductDetailPage";
-import { LoginPage } from "src/pages/LoginPage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "src/Layout";
+import "src/global.css";
+import { HomePage } from "src/pages/HomePage";
+import { LoginPage } from "src/pages/LoginPage";
 import { NotFound } from "src/pages/NotFound/NotFound";
+import { ProductDetailPage } from "src/pages/ProductDetailPage";
+import { ShopCategoryPage } from "src/pages/ShopCategoryPage";
 import { RegisterPage } from "src/pages/RegisterPage";
-import { Provider } from "react-redux";
-import { store } from "src/app/store";
-import { PrivateRoute } from "./pages/PrivateRoute";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="home" index element={<HomePage />} />
-          <Route path="product-detail" element={<ProductDetailPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="/" element={<PrivateRoute />}>
-            <Route path="shop-category" element={<ShopCategoryPage />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </Provider>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="home" index element={<HomePage />} />
+        <Route path="product-detail" element={<ProductDetailPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="shop-category" element={<ShopCategoryPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
 );

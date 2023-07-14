@@ -11,15 +11,11 @@ import {
 import "./LoginPage.css";
 import { useState } from "react";
 import { axiosClient } from "src/axios/AxiosClient";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setLoggedInAccount } from "src/app/AccountSlice";
 import { useNavigate } from "react-router-dom";
 import { BannerPath } from "src/components";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -30,15 +26,9 @@ export const LoginPage = () => {
   };
 
   const handleLogin = async () => {
-    const { data, err } = await axiosClient.post("/login", formData);
-    if (err) {
-      toast.error("Username or password incorrect");
-    } else {
-      const { accessToken, account } = data;
-      localStorage.setItem("accessToken", accessToken);
-      dispatch(setLoggedInAccount(account));
-      navigate("/home");
-    }
+    const { data } = await axiosClient.post("/login", formData);
+    const { accessToken } = data;
+    localStorage.setItem("accessToken", accessToken);
   };
   return (
     <>

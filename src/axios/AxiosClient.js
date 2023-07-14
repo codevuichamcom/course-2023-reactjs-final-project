@@ -5,14 +5,9 @@ const axiosClient = axios.create({
   timeout: 300000,
 });
 
-const noAuth = ["/login", "/accounts"];
-
 const onRequest = (config) => {
-  const { url } = config;
-  if (!noAuth.includes(url)) {
-    const accessToken = localStorage.getItem("accessToken");
-    config.headers = { Authorization: `Bearer ${accessToken}` };
-  }
+  const accessToken = localStorage.getItem("accessToken");
+  config.headers = { Authorization: `Bearer ${accessToken}` };
   return config;
 };
 const onResponse = (response) => {

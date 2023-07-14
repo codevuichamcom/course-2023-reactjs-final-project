@@ -19,7 +19,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const accountLoggedIn = useSelector((state) => state.account.loggedIn);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -58,12 +57,6 @@ export const Header = () => {
                   Buy Now
                 </Button>
               </NavItem>
-              {accountLoggedIn.username ? (
-                <Avatar
-                  imageURL="img/user.png"
-                  name={accountLoggedIn.username}
-                />
-              ) : (
                 <Button
                   color="primary"
                   outline
@@ -73,7 +66,6 @@ export const Header = () => {
                 >
                   Login
                 </Button>
-              )}
             </Nav>
           </Collapse>
         </Navbar>
