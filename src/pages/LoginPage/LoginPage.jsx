@@ -31,6 +31,10 @@ export const LoginPage = () => {
 
   const handleLogin = async () => {
     const { data, err } = await axiosClient.post("/login", formData);
+    if (err) {
+      toast.error("Login fail!");
+      return;
+    }
     const { accessToken, account } = data;
     localStorage.setItem("accessToken", accessToken);
     dispatch(setLoggedInAccount(account));

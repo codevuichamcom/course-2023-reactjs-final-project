@@ -9,8 +9,35 @@ import {
   Row,
 } from "reactstrap";
 import "./RegisterPage.css";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { axiosClient } from "src/axios/AxiosClient";
 
 export const RegisterPage = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleDataChange = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+  };
+
+  const hanndleRegister = async () => {
+    const { password, confirmPassword } = formData;
+    if (password !== confirmPassword) {
+      toast.error("Confirm password does not match");
+      return;
+    }
+    const { err } = await axiosClient.post("/accounts", formData);
+    if (err) {
+      toast.error("Register fail!");
+    } else {
+      toast.success("Register success!");
+    }
+  };
   return (
     <main className="register-page">
       <Container>
@@ -28,15 +55,35 @@ export const RegisterPage = () => {
             <Form>
               <FormGroup>
                 <Label htmlFor="Username">Username</Label>
-                <Input id="username" placeholder="Username" />
+                <Input
+                  id="username"
+                  placeholder="Username"
+                  onChange={(e) => {
+                    handleDataChange("username", e.target.value);
+                  }}
+                />
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="email">Email Address</Label>
-                <Input id="email" type="email" placeholder="Email Address" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email Address"
+                  onChange={(e) => {
+                    handleDataChange("email", e.target.value);
+                  }}
+                />
               </FormGroup>
               <FormGroup>
                 <Label for="password">Password</Label>
-                <Input type="password" id="password" placeholder="Password" />
+                <Input
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  onChange={(e) => {
+                    handleDataChange("password", e.target.value);
+                  }}
+                />
               </FormGroup>
               <FormGroup>
                 <Label for="confirmPassword">Confirm Password</Label>
@@ -44,9 +91,12 @@ export const RegisterPage = () => {
                   type="password"
                   id="confirmPassword"
                   placeholder="Confirm Password"
+                  onChange={(e) => {
+                    handleDataChange("confirmPassword", e.target.value);
+                  }}
                 />
               </FormGroup>
-              <Button outline color="primary">
+              <Button outline color="primary" onClick={hanndleRegister}>
                 Register
               </Button>
             </Form>
