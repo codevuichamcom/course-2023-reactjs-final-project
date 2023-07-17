@@ -14,7 +14,6 @@ import { store } from "src/app/store";
 import { Provider } from "react-redux";
 import { BlogPage } from "./pages/BlogPage";
 import { PrivateRoute } from "./pages/PrivateRoute";
-import { BlogPage } from "./pages/BlogPage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
