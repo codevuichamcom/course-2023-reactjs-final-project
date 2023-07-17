@@ -2,7 +2,13 @@ import { Container } from "reactstrap";
 import { ProductList } from "src/components";
 import "./ProductListWithIntro.css";
 
-export const ProductListWithIntro = ({ description, title, name, ...args }) => {
+export const ProductListWithIntro = ({
+  description,
+  title,
+  name,
+  products,
+  ...args
+}) => {
   return (
     <div className="product-list">
       <Container>
@@ -12,7 +18,7 @@ export const ProductListWithIntro = ({ description, title, name, ...args }) => {
             {title} <span className="product-list__intro__style">{name}</span>
           </h2>
         </div>
-        <ProductList {...args} />
+        <ProductList products={products} {...args} />
       </Container>
     </div>
   );

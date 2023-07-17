@@ -7,6 +7,7 @@ const initialState = {
     email: "",
     avatar: "",
   },
+  carts: {},
 };
 
 export const AccountSlice = createSlice({
@@ -16,11 +17,20 @@ export const AccountSlice = createSlice({
     setLoggedInAccount(state, action) {
       state.loggedIn = action.payload;
     },
+    addToCart(state, action) {
+      const product = action.payload;
+      const productInCart = state.carts[product.id];
+      if (productInCart) {
+        productInCart.quantity = productInCart.quantity + 1;
+      } else {
+        state.carts[product.id] = { product, quantity: 0 };
+      }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoggedInAccount } = AccountSlice.actions;
+export const { setLoggedInAccount, addToCart } = AccountSlice.actions;
 
 const accountReducer = AccountSlice.reducer;
 export { accountReducer };

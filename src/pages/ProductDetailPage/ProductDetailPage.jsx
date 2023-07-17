@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductDetailPage.css";
 import { BannerPath, Comment, Footer, Header } from "src/components";
-import { Button, Col, Container, Input, Row } from "reactstrap";
+import { Button, Col, Container, Input, Row, Spinner } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
+import { axiosClient } from "src/axios/AxiosClient";
+import { useDispatch } from "react-redux";
+import { addToCart } from "src/app/feature/account/AccountSlice";
 
 const renderTab = (tab) => {
   switch (tab) {
@@ -43,72 +47,105 @@ const renderTab = (tab) => {
 };
 export const ProductDetailPage = () => {
   const [activeTab, setActiveTab] = useState(1);
-  return (
-    <div className="product-detail-page">
-      <BannerPath title="Product Detail" path="Home - Product detail" />
-      <Container className="product-detail-page__product-area">
-        <Row>
-          <Col className="product-detail-page__product-area__image" lg="6">
-            <img className="img-fluid" src="img/category/s-p1.jpg" alt="" />
-          </Col>
-          <Col className="product-detail-page__product-area__infor" lg="6">
-            <h3>Faded SkyBlu Denim Jeans</h3>
-            <h2>$149.99</h2>
-            <ul className="product-detail-page__product-area__infor__list">
-              <li>
-                <span>Category</span> : Household
-              </li>
-              <li>
-                <span>Availibility</span> : In Stock
-              </li>
-            </ul>
-            <p>
-              Mill Oil is an innovative oil filled radiator with the most modern
-              technology. If you are looking for something that can make your
-              interior look awesome, and at the same time give you the pleasant
-              warm feeling during the winter.
-            </p>
-            <div className="product-detail-page__product-area__infor__quantity">
-              <label htmlFor="quantity">Quantity:</label>
-              <Input id="quantity" type="text" size="2" value="1" />
-              <Button color="primary">Add to Cart</Button>
-            </div>
-            <div className="product-detail-page__product-area__infor__favorite">
-              <FontAwesomeIcon
-                beat
-                size="2x"
-                icon={faHeart}
-                // mask={faHeart}
-                color="red"
-                className="product-detail-page__product-area__infor__favorite__icon"
-              />
-              <div>100k+</div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-      <Container className="product-detail-page__description-area mb-5">
-        <ul className="product-detail-page__description-area__tabs mt-5">
-          <li onClick={() => setActiveTab(1)}>
-            <Button outline color="primary" active={activeTab === 1}>
-              Description
-            </Button>
-          </li>
-          <li onClick={() => setActiveTab(2)}>
-            <Button outline color="primary" active={activeTab === 2}>
-              Specification
-            </Button>
-          </li>
-          <li onClick={() => setActiveTab(3)}>
-            <Button outline color="primary" active={activeTab === 3}>
-              Comments & Review
-            </Button>
-          </li>
-        </ul>
-        <div className="product-detail-page__description-area__contents">
-          {renderTab(activeTab)}
-        </div>
-      </Container>
-    </div>
-  );
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axiosClient.get(`/products/${productId}`);
+      setProduct(data);
+    };
+    fetchData();
+  }, []);
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
+
+  if (!product)
+    return (
+      <h1
+        style={{
+          marginTop: "200px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Spinner
+          color="primary"
+          style={{
+            height: "3rem",
+            width: "3rem",
+          }}
+        >
+          Loading...
+        </Spinner>
+      </h1>
+    );
+  else
+    return (
+      <div className="product-detail-page">
+        <BannerPath title="Product Detail" path="Home - Product detail" />
+        <Container className="product-detail-page__product-area">
+          <Row>
+            <Col className="product-detail-page__product-area__image" lg="6">
+              <img className="img-fluid" src={"/" + product.imageUrl} alt="" />
+            </Col>
+            <Col className="product-detail-page__product-area__infor" lg="6">
+              <h3>{product.name}</h3>
+              <h2>${product.price}</h2>
+              <ul className="product-detail-page__product-area__infor__list">
+                <li>
+                  <span>Category</span> : {product.category.categoryName}
+                </li>
+                <li>
+                  <span>Availibility</span> : {product.availability}
+                </li>
+              </ul>
+              <p>{product.summary}</p>
+              <div className="product-detail-page__product-area__infor__quantity">
+                <label htmlFor="quantity">Quantity:</label>
+                <Input id="quantity" type="text" size="2" value="1" />
+                <Button color="primary" onClick={handleAddToCart}>
+                  Add to Cart
+                </Button>
+              </div>
+              <div className="product-detail-page__product-area__infor__favorite">
+                <FontAwesomeIcon
+                  beat
+                  size="2x"
+                  icon={faHeart}
+                  // mask={faHeart}
+                  color="red"
+                  className="product-detail-page__product-area__infor__favorite__icon"
+                />
+                <div>100k+</div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+        <Container className="product-detail-page__description-area mb-5">
+          <ul className="product-detail-page__description-area__tabs mt-5">
+            <li onClick={() => setActiveTab(1)}>
+              <Button outline color="primary" active={activeTab === 1}>
+                Description
+              </Button>
+            </li>
+            <li onClick={() => setActiveTab(2)}>
+              <Button outline color="primary" active={activeTab === 2}>
+                Specification
+              </Button>
+            </li>
+            <li onClick={() => setActiveTab(3)}>
+              <Button outline color="primary" active={activeTab === 3}>
+                Comments & Review
+              </Button>
+            </li>
+          </ul>
+          <div className="product-detail-page__description-area__contents">
+            {renderTab(activeTab)}
+          </div>
+        </Container>
+      </div>
+    );
 };

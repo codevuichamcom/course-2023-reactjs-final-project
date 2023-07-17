@@ -20,6 +20,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 export const Header = () => {
   const navigate = useNavigate();
   const accountLoggedIn = useSelector((state) => state.account.loggedIn);
+  const carts = useSelector((state) => state.account.carts);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -51,7 +52,8 @@ export const Header = () => {
                 <FontAwesomeIcon icon={faSearch} />
               </NavItem>
               <NavItem className="header__actions__cart">
-                <FontAwesomeIcon icon={faShoppingCart} />
+                <FontAwesomeIcon icon={faShoppingCart} />{" "}
+                {Object.keys(carts).length}
               </NavItem>
               <NavItem className="header__actions__buy">
                 <Button color="primary" outline>
