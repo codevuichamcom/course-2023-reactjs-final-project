@@ -4,6 +4,7 @@ import { BannerPath, Comment, Footer, Header } from "src/components";
 import { Button, Col, Container, Input, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
 
 const renderTab = (tab) => {
   switch (tab) {
@@ -43,13 +44,14 @@ const renderTab = (tab) => {
 };
 export const ProductDetailPage = () => {
   const [activeTab, setActiveTab] = useState(1);
+  let { productId } = useParams();
   return (
     <div className="product-detail-page">
       <BannerPath title="Product Detail" path="Home - Product detail" />
       <Container className="product-detail-page__product-area">
         <Row>
           <Col className="product-detail-page__product-area__image" lg="6">
-            <img className="img-fluid" src="img/category/s-p1.jpg" alt="" />
+            <img className="img-fluid" src="/img/category/s-p1.jpg" alt="" />
           </Col>
           <Col className="product-detail-page__product-area__infor" lg="6">
             <h3>Faded SkyBlu Denim Jeans</h3>

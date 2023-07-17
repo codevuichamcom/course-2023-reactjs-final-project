@@ -1,11 +1,5 @@
 import { Col, Container, Input, Row } from "reactstrap";
-import {
-  BannerPath,
-  Footer,
-  Header,
-  ProductList,
-  SelectBoxCustom,
-} from "src/components";
+import { BannerPath, ProductList, SelectBoxCustom } from "src/components";
 import "./ShopCategoryPage.css";
 import { RadioList } from "./components";
 

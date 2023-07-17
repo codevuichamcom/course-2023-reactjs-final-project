@@ -1,10 +1,15 @@
 import { Card, CardBody } from "reactstrap";
 
 import "./ProductCard.css";
+import { useNavigate } from "react-router-dom";
 
 export const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+  const gotoProductDetail = () => {
+    navigate(`/product-detail/${product.id}`);
+  };
   return (
-    <Card className="product-card text-center">
+    <Card className="product-card text-center" onClick={gotoProductDetail}>
       <img alt="Sample" src={product.imageUrl} />
       <CardBody>
         <p>{product.brand}</p>
