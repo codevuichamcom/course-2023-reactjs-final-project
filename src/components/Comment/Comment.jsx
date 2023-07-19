@@ -52,7 +52,7 @@ export const Comment = () => {
         <li className="comment__message__items">
           <div className="comment__message__review">
             <div className="comment__message__review__header me-3">
-              <img src="img/product/review-1.png" alt="" />
+              <img src="/img/product/review-1.png" alt="" />
             </div>
             <div className="comment__message__review__body">
               <h4>Blake Ruiz</h4>
@@ -79,7 +79,7 @@ export const Comment = () => {
         <li className="comment__message__items comment__message__items--reply">
           <div className="comment__message__review">
             <div className="comment__message__review__header me-3">
-              <img src="img/product/review-1.png" alt="" />
+              <img src="/img/product/review-2.png" alt="" />
             </div>
             <div className="comment__message__review__body">
               <h4>Blake Ruiz</h4>
@@ -96,7 +96,7 @@ export const Comment = () => {
         <li className="comment__message__items comment__message__items--reply">
           <div className="comment__message__review">
             <div className="comment__message__review__header me-3">
-              <img src="img/product/review-1.png" alt="" />
+              <img src="/img/product/review-3.png" alt="" />
             </div>
             <div className="comment__message__review__body">
               <h4>Blake Ruiz</h4>
@@ -113,7 +113,7 @@ export const Comment = () => {
         <li className="comment__message__items comment__message__items--reply">
           <div className="comment__message__review">
             <div className="comment__message__review__header me-3">
-              <img src="img/product/review-1.png" alt="" />
+              <img src="/img/product/review-1.png" alt="" />
             </div>
             <div className="comment__message__review__body">
               <h4>Blake Ruiz</h4>

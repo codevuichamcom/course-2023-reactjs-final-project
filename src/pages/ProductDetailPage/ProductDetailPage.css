@@ -2,6 +2,11 @@
   padding-top: 100px;
 }
 
+.product-detail-page__product-area__image img {
+  width: 555px;
+  height: 600px;
+}
+
 .product-detail-page__product-area__infor {
   padding-top: 20px;
 }
