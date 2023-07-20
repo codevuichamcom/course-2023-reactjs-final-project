@@ -1,21 +1,25 @@
 import { Col, Container, Input, Row } from "reactstrap";
-import {
-  BannerPath,
-  Footer,
-  Header,
-  ProductList,
-  SelectBoxCustom,
-} from "src/components";
+import { BannerPath, ProductList, SelectBoxCustom } from "src/components";
 import "./ShopCategoryPage.css";
 import { RadioList } from "./components";
+import { useEffect, useState } from "react";
+import { axiosClient } from "src/axios/AxiosClient";
 
-const browseCategories = [
-  { id: 1, type: "brand", categoryName: "Men", quantity: 3600 },
-  { id: 2, type: "brand", categoryName: "Women", quantity: 3600 },
-  { id: 3, type: "brand", categoryName: "Accessories", quantity: 3600 },
-  { id: 4, type: "brand", categoryName: "Footwear", quantity: 3600 },
-];
 export const ShopCategoryPage = () => {
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: categories } = await axiosClient.get("/categories");
+      setCategories(categories);
+      const { data: brands } = await axiosClient.get("/brands");
+      setBrands(brands);
+      const { data: colors } = await axiosClient.get("/colors");
+      setColors(colors);
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <main className="shop-category-page__main">
@@ -26,18 +30,18 @@ export const ShopCategoryPage = () => {
               <div className="sidebar">
                 <div className="sidebar__header">Browse Categories</div>
                 <div className="sidebar__main">
-                  <RadioList data={browseCategories} />
+                  <RadioList data={categories} />
                 </div>
               </div>
               <div className="sidebar mt-4">
                 <div className="sidebar__header">Product Filter</div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Brands</div>
-                  <RadioList data={browseCategories} />
+                  <RadioList data={brands} />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Colors</div>
-                  <RadioList data={browseCategories} />
+                  <RadioList data={colors} />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Price</div>
