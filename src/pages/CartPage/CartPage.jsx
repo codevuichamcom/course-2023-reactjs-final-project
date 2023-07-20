@@ -2,11 +2,13 @@ import React from "react";
 import { Button, Container, Input, Table } from "reactstrap";
 import { BannerPath } from "src/components";
 import "./CartPage.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { updateQuantity } from "src/app/feature/cart/CartSlice";
 
 export const CartPage = () => {
   const navigate = useNavigate();
+  const dispath = useDispatch();
   const carts = useSelector((state) => state.cart.carts);
   const renderCartRow = () => {
     const data = [];
@@ -21,7 +23,18 @@ export const CartPage = () => {
           <td>Minimalistic shop for multipurpose use</td>
           <td>${product.price}</td>
           <td className="cart-area__quantity">
-            <Input type="number" value={quantity} />
+            <Input
+              type="number"
+              onChange={(e) => {
+                dispath(
+                  updateQuantity({
+                    productId: product.id,
+                    quantity: e.target.value,
+                  })
+                );
+              }}
+              value={quantity}
+            />
           </td>
           <td>${product.price * quantity}</td>
         </tr>

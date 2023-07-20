@@ -17,11 +17,18 @@ export const CartSlice = createSlice({
         state.carts[product.id] = { product, quantity: quantity };
       }
     },
+    updateQuantity(state, action) {
+      const { productId, quantity } = action.payload;
+      const productInCart = state.carts[productId];
+      if (productInCart) {
+        productInCart.quantity = parseInt(quantity);
+      }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addToCart } = CartSlice.actions;
+export const { addToCart, updateQuantity } = CartSlice.actions;
 
 const cartReducer = CartSlice.reducer;
 export { cartReducer };
