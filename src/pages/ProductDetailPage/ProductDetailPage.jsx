@@ -108,7 +108,7 @@ export const ProductDetailPage = () => {
                 <label htmlFor="quantity">Quantity:</label>
                 <Input
                   id="quantity"
-                  type="text"
+                  type="number"
                   size="2"
                   value={quantity}
                   onChange={(e) => {

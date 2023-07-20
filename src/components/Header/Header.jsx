@@ -24,6 +24,10 @@ export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+
+  const gotoCartPage = () => {
+    navigate("/cart");
+  };
   return (
     <div className="header">
       <Container>
@@ -51,7 +55,7 @@ export const Header = () => {
               <NavItem className="header__actions__search">
                 <FontAwesomeIcon icon={faSearch} />
               </NavItem>
-              <NavItem className="header__actions__cart">
+              <NavItem className="header__actions__cart" onClick={gotoCartPage}>
                 <FontAwesomeIcon icon={faShoppingCart} />{" "}
                 <sup>{Object.keys(carts).length}</sup>
               </NavItem>
