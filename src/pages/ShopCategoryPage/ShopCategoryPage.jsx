@@ -5,10 +5,15 @@ import { RadioList } from "./components";
 import { useEffect, useState } from "react";
 import { axiosClient } from "src/axios/AxiosClient";
 
+const sortOptions = [
+  { key: 1, value: "Price Asc" },
+  { key: 2, value: "Price Dsc" },
+];
 export const ShopCategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const { data: categories } = await axiosClient.get("/categories");
@@ -17,6 +22,10 @@ export const ShopCategoryPage = () => {
       setBrands(brands);
       const { data: colors } = await axiosClient.get("/colors");
       setColors(colors);
+      const { data: products } = await axiosClient.get(
+        "/products/search?priceTo=1000000"
+      );
+      setProducts(products);
     };
     fetchData();
   }, []);
@@ -62,26 +71,20 @@ export const ShopCategoryPage = () => {
               <div className="filter-bar d-flex align-items-center flex-wrap">
                 <SelectBoxCustom
                   className="filter-bar__sort w-25"
-                  data={[{ key: 1, value: "Quan" }]}
-                  onSelectBoxChange={(value) => console.log(value)}
-                />
-                <SelectBoxCustom
-                  className="w-25 ms-3 me-auto"
-                  data={[{ key: 1, value: "Quan" }]}
+                  data={sortOptions}
                   onSelectBoxChange={(value) => console.log(value)}
                 />
                 <Input
-                  className="filter-bar__search"
+                  className="filter-bar__search ms-auto"
                   bsSize="sm"
                   type="search"
                   placeholder="Search here..."
                 />
               </div>
-              <ProductList xl="3" />
+              <ProductList products={products.data} xl="3" />
             </Col>
           </Row>
         </Container>
-        <ProductList md="4" lg="6" xl="6" />
       </main>
     </>
   );
