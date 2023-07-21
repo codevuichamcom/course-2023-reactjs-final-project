@@ -8,6 +8,8 @@ import {
 } from "src/components";
 import "./ShopCategoryPage.css";
 import { RadioList } from "./components";
+import { useEffect, useState } from "react";
+import { axiosClient } from "src/axios/AxiosClient";
 
 const browseCategories = [
   { id: 1, type: "brand", categoryName: "Men", quantity: 3600 },
@@ -16,6 +18,38 @@ const browseCategories = [
   { id: 4, type: "brand", categoryName: "Footwear", quantity: 3600 },
 ];
 export const ShopCategoryPage = () => {
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: categories } = await axiosClient.get("/categories");
+      setCategories(
+        categories.map((category) => {
+          return { id: category.id, name: category.categoryName };
+        })
+      );
+      const { data: brands } = await axiosClient.get("/brands");
+      setBrands(
+        brands.map((brand) => {
+          return { id: brand.id, name: brand.branchName, type: "Brand" };
+        })
+      );
+      const { data: colors } = await axiosClient.get("/colors");
+      setColors(
+        colors.map((color) => {
+          return { id: color.id, name: color.colorName, type: "Color" };
+        })
+      );
+
+      const { data: products } = await axiosClient.get(
+        "/products/search?priceTo=10000&name=a"
+      );
+      setProducts(products);
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <main className="shop-category-page__main">
@@ -26,18 +60,18 @@ export const ShopCategoryPage = () => {
               <div className="sidebar">
                 <div className="sidebar__header">Browse Categories</div>
                 <div className="sidebar__main">
-                  <RadioList data={browseCategories} />
+                  <RadioList data={categories} />
                 </div>
               </div>
               <div className="sidebar mt-4">
                 <div className="sidebar__header">Product Filter</div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Brands</div>
-                  <RadioList data={browseCategories} />
+                  <RadioList data={brands} />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Colors</div>
-                  <RadioList data={browseCategories} />
+                  <RadioList data={colors} />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Price</div>
@@ -73,11 +107,10 @@ export const ShopCategoryPage = () => {
                   placeholder="Search here..."
                 />
               </div>
-              <ProductList xl="3" />
+              <ProductList products={products.data} xl="3" />
             </Col>
           </Row>
         </Container>
-        <ProductList md="4" lg="6" xl="6" />
       </main>
     </>
   );

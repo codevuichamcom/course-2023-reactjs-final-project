@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./HomePage.css";
 import { Banner, Offer, ProductListWithIntro, Slide } from "./components";
 import { axiosClient } from "src/axios/AxiosClient";
 export const HomePage = () => {
