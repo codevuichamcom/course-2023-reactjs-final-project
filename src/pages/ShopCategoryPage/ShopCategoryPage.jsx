@@ -1,4 +1,12 @@
-import { Col, Container, Input, Row } from "reactstrap";
+import {
+  Col,
+  Container,
+  Input,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Row,
+} from "reactstrap";
 import { BannerPath, ProductList, SelectBoxCustom } from "src/components";
 import "./ShopCategoryPage.css";
 import { RadioList } from "./components";
@@ -22,9 +30,13 @@ export const ShopCategoryPage = () => {
       setBrands(brands);
       const { data: colors } = await axiosClient.get("/colors");
       setColors(colors);
-      const { data: products } = await axiosClient.get(
-        "/products/search?priceTo=1000000"
-      );
+      const params = {
+        priceTo: 100000,
+        name: "hello",
+      };
+      const { data: products } = await axiosClient.get("/products/search", {
+        params,
+      });
       setProducts(products);
     };
     fetchData();
@@ -82,6 +94,35 @@ export const ShopCategoryPage = () => {
                 />
               </div>
               <ProductList products={products.data} xl="3" />
+              <Pagination aria-label="Page navigation example">
+                <PaginationItem disabled>
+                  <PaginationLink first href="#" />
+                </PaginationItem>
+                <PaginationItem disabled>
+                  <PaginationLink href="#" previous />
+                </PaginationItem>
+                <PaginationItem active>
+                  <PaginationLink href="#">1</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">2</PaginationLink>
+                </PaginationItem>
+                <PaginationItem disabled>
+                  <PaginationLink href="#">3</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">4</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#">5</PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" next />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" last />
+                </PaginationItem>
+              </Pagination>
             </Col>
           </Row>
         </Container>
