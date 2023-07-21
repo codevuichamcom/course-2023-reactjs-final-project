@@ -14,6 +14,7 @@ import { store } from "src/app/store";
 import { Provider } from "react-redux";
 import { BlogPage } from "./pages/BlogPage";
 import { PrivateRoute } from "./pages/PrivateRoute";
+import { CartPage } from "./pages/CartPage";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="shop-category" element={<ShopCategoryPage />} />
+          <Route path="cart" element={<CartPage />} />
           <Route path="/" element={<PrivateRoute />}>
             <Route path="blog" element={<BlogPage />} />
           </Route>

@@ -7,7 +7,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { axiosClient } from "src/axios/AxiosClient";
 import { useDispatch } from "react-redux";
-import { addToCart } from "src/app/feature/account/AccountSlice";
+import { addToCart } from "src/app/feature/cart/CartSlice";
 
 const renderTab = (tab) => {
   switch (tab) {
@@ -49,6 +49,7 @@ export const ProductDetailPage = () => {
   const [activeTab, setActiveTab] = useState(1);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -59,7 +60,7 @@ export const ProductDetailPage = () => {
   }, []);
 
   const handleAddToCart = () => {
-    dispatch(addToCart(product));
+    dispatch(addToCart({ product, quantity }));
   };
 
   if (!product)
@@ -105,7 +106,15 @@ export const ProductDetailPage = () => {
               <p>{product.summary}</p>
               <div className="product-detail-page__product-area__infor__quantity">
                 <label htmlFor="quantity">Quantity:</label>
-                <Input id="quantity" type="text" size="2" value="1" />
+                <Input
+                  id="quantity"
+                  type="number"
+                  size="2"
+                  value={quantity}
+                  onChange={(e) => {
+                    setQuantity(e.target.value);
+                  }}
+                />
                 <Button color="primary" onClick={handleAddToCart}>
                   Add to Cart
                 </Button>
