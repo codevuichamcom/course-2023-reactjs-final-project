@@ -61,3 +61,9 @@
 .filter-bar__search {
   max-width: 200px;
 }
+
+.shop-category-page_pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 50px;
+}

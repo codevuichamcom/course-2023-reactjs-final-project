@@ -1,7 +1,12 @@
 import React from "react";
 import { Input } from "reactstrap";
 
-export const SelectBoxCustom = ({ data, onSelectBoxChange, ...args }) => {
+export const SelectBoxCustom = ({
+  data,
+  selected,
+  onSelectBoxChange,
+  ...args
+}) => {
   return (
     <Input
       {...args}
@@ -10,9 +15,13 @@ export const SelectBoxCustom = ({ data, onSelectBoxChange, ...args }) => {
         onSelectBoxChange(e.target.value);
       }}
     >
-      <option value={0}>default</option>
+      <option value="default">default</option>
       {data.map((item) => (
-        <option key={item.key} value={item.key}>
+        <option
+          key={item.key}
+          value={item.key}
+          selected={selected === item.key}
+        >
           {item.value}
         </option>
       ))}

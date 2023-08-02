@@ -6,3 +6,4 @@ export { ProductList } from "./ProductList/ProductList";
 export { SelectBoxCustom } from "./SelectBoxCustom/SelectBoxCustom";
 export { Comment } from "./Comment/Comment";
 export { StarList } from "./StarList/StarList";
+export { PaginationComponent } from "./Pagination/PaginationComponent";

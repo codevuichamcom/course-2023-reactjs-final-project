@@ -1,33 +1,49 @@
+import { useEffect, useState } from "react";
 import { Col, Container, Input, Row } from "reactstrap";
+import { axiosClient } from "src/axios/AxiosClient";
 import {
   BannerPath,
-  Footer,
-  Header,
+  PaginationComponent,
   ProductList,
   SelectBoxCustom,
 } from "src/components";
 import "./ShopCategoryPage.css";
 import { RadioList } from "./components";
-import { useEffect, useState } from "react";
-import { axiosClient } from "src/axios/AxiosClient";
 
-const browseCategories = [
-  { id: 1, type: "brand", categoryName: "Men", quantity: 3600 },
-  { id: 2, type: "brand", categoryName: "Women", quantity: 3600 },
-  { id: 3, type: "brand", categoryName: "Accessories", quantity: 3600 },
-  { id: 4, type: "brand", categoryName: "Footwear", quantity: 3600 },
+const sortOptions = [
+  { key: "asc", value: "Price ASC" },
+  { key: "desc", value: "Price DESC" },
 ];
 export const ShopCategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [productPage, setProductPage] = useState({
+    data: [],
+    totalElements: 0,
+    totalPage: 0,
+  });
+  const [searchParams, setSearchParams] = useState({
+    categoryId: null,
+    brandId: null,
+    colorId: null,
+    sortByPrice: null,
+    name: null,
+    priceFrom: null,
+    priceTo: 10000,
+    pageIndex: 1,
+    pageSize: 1,
+  });
   useEffect(() => {
     const fetchData = async () => {
       const { data: categories } = await axiosClient.get("/categories");
       setCategories(
         categories.map((category) => {
-          return { id: category.id, name: category.categoryName };
+          return {
+            id: category.id,
+            name: category.categoryName,
+            type: "Category",
+          };
         })
       );
       const { data: brands } = await axiosClient.get("/brands");
@@ -43,13 +59,29 @@ export const ShopCategoryPage = () => {
         })
       );
 
-      const { data: products } = await axiosClient.get(
-        "/products/search?priceTo=10000&name=a"
-      );
-      setProducts(products);
+      const { data: productPage } = await axiosClient.get("/products/search", {
+        params: searchParams,
+      });
+      setProductPage(productPage);
     };
     fetchData();
   }, []);
+
+  const searchProducts = async (params) => {
+    const { data: productPage } = await axiosClient.get("/products/search", {
+      params,
+    });
+    setProductPage(productPage);
+  };
+
+  useEffect(() => {
+    if (searchParams) {
+      if (searchParams.sortByPrice === "default") {
+        searchParams.sortByPrice = null;
+      }
+      searchProducts(searchParams);
+    }
+  }, [searchParams]);
   return (
     <>
       <main className="shop-category-page__main">
@@ -60,18 +92,36 @@ export const ShopCategoryPage = () => {
               <div className="sidebar">
                 <div className="sidebar__header">Browse Categories</div>
                 <div className="sidebar__main">
-                  <RadioList data={categories} />
+                  <RadioList
+                    selected={searchParams.categoryId}
+                    onSelect={(categoryId) => {
+                      setSearchParams({ ...searchParams, categoryId });
+                    }}
+                    data={categories}
+                  />
                 </div>
               </div>
               <div className="sidebar mt-4">
                 <div className="sidebar__header">Product Filter</div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Brands</div>
-                  <RadioList data={brands} />
+                  <RadioList
+                    selected={searchParams.brandId}
+                    onSelect={(brandId) => {
+                      setSearchParams({ ...searchParams, brandId });
+                    }}
+                    data={brands}
+                  />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Colors</div>
-                  <RadioList data={colors} />
+                  <RadioList
+                    selected={searchParams.colorId}
+                    onSelect={(colorId) => {
+                      setSearchParams({ ...searchParams, colorId });
+                    }}
+                    data={colors}
+                  />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Price</div>
@@ -79,10 +129,24 @@ export const ShopCategoryPage = () => {
                     <Input
                       className="sidebar__range__from"
                       placeholder="From"
+                      value={searchParams.priceFrom}
+                      onChange={(e) => {
+                        setSearchParams({
+                          ...searchParams,
+                          priceFrom: parseInt(e.target.value),
+                        });
+                      }}
                     />
                     <Input
                       className="sidebar__range__to ms-2"
                       placeholder="To"
+                      value={searchParams.priceTo}
+                      onChange={(e) => {
+                        setSearchParams({
+                          ...searchParams,
+                          priceTo: parseInt(e.target.value),
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -92,22 +156,33 @@ export const ShopCategoryPage = () => {
               <div className="filter-bar d-flex align-items-center flex-wrap">
                 <SelectBoxCustom
                   className="filter-bar__sort w-25"
-                  data={[{ key: 1, value: "Quan" }]}
-                  onSelectBoxChange={(value) => console.log(value)}
-                />
-                <SelectBoxCustom
-                  className="w-25 ms-3 me-auto"
-                  data={[{ key: 1, value: "Quan" }]}
-                  onSelectBoxChange={(value) => console.log(value)}
+                  data={sortOptions}
+                  selected={searchParams.sortByPrice}
+                  onSelectBoxChange={(sortByPrice) => {
+                    setSearchParams({ ...searchParams, sortByPrice });
+                  }}
                 />
                 <Input
-                  className="filter-bar__search"
+                  className="filter-bar__search ms-auto"
                   bsSize="sm"
                   type="search"
                   placeholder="Search here..."
+                  value={searchParams.name}
+                  onChange={(e) => {
+                    setSearchParams({ ...searchParams, name: e.target.value });
+                  }}
                 />
               </div>
-              <ProductList products={products.data} xl="3" />
+              <ProductList products={productPage.data} xl="3" />
+              <div className="shop-category-page_pagination">
+                <PaginationComponent
+                  pageIndex={searchParams.pageIndex}
+                  onPageChange={(pageIndex) => {
+                    setSearchParams({ ...searchParams, pageIndex });
+                  }}
+                  totalPage={productPage.totalPage}
+                />
+              </div>
             </Col>
           </Row>
         </Container>
