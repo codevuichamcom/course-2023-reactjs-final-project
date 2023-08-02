@@ -11,23 +11,41 @@ import { RadioList } from "./components";
 import { useEffect, useState } from "react";
 import { axiosClient } from "src/axios/AxiosClient";
 
-const browseCategories = [
-  { id: 1, type: "brand", categoryName: "Men", quantity: 3600 },
-  { id: 2, type: "brand", categoryName: "Women", quantity: 3600 },
-  { id: 3, type: "brand", categoryName: "Accessories", quantity: 3600 },
-  { id: 4, type: "brand", categoryName: "Footwear", quantity: 3600 },
+const sortOptions = [
+  { key: "asc", value: "Price Asc" },
+  { key: "desc", value: "Price Dsc" },
 ];
+
+const searchProduct = async (params) => {};
 export const ShopCategoryPage = () => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
   const [products, setProducts] = useState([]);
+  const [searchParams, setSearchParams] = useState({
+    categoryId: null,
+    brandId: null,
+    colorId: null,
+    sortPrice: null,
+    name: null,
+  });
+
+  const fetchProducts = async (params) => {
+    const { data: products } = await axiosClient.get("/products/search", {
+      params,
+    });
+    setProducts(products);
+  };
   useEffect(() => {
     const fetchData = async () => {
       const { data: categories } = await axiosClient.get("/categories");
       setCategories(
         categories.map((category) => {
-          return { id: category.id, name: category.categoryName };
+          return {
+            id: category.id,
+            name: category.categoryName,
+            type: "Category",
+          };
         })
       );
       const { data: brands } = await axiosClient.get("/brands");
@@ -43,13 +61,16 @@ export const ShopCategoryPage = () => {
         })
       );
 
-      const { data: products } = await axiosClient.get(
-        "/products/search?priceTo=10000&name=a"
-      );
+      const { data: products } = await axiosClient.get("/products/search");
       setProducts(products);
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    if (searchParams) {
+      fetchProducts(searchParams);
+    }
+  }, [searchParams]);
   return (
     <>
       <main className="shop-category-page__main">
@@ -60,18 +81,36 @@ export const ShopCategoryPage = () => {
               <div className="sidebar">
                 <div className="sidebar__header">Browse Categories</div>
                 <div className="sidebar__main">
-                  <RadioList data={categories} />
+                  <RadioList
+                    selected={searchParams.categoryId}
+                    handleSelected={(categoryId) => {
+                      setSearchParams({ ...searchParams, categoryId });
+                    }}
+                    data={categories}
+                  />
                 </div>
               </div>
               <div className="sidebar mt-4">
                 <div className="sidebar__header">Product Filter</div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Brands</div>
-                  <RadioList data={brands} />
+                  <RadioList
+                    selected={searchParams.brandId}
+                    handleSelected={(brandId) => {
+                      setSearchParams({ ...searchParams, brandId });
+                    }}
+                    data={brands}
+                  />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Colors</div>
-                  <RadioList data={colors} />
+                  <RadioList
+                    selected={searchParams.colorId}
+                    handleSelected={(colorId) => {
+                      setSearchParams({ ...searchParams, colorId });
+                    }}
+                    data={colors}
+                  />
                 </div>
                 <div className="sidebar__main">
                   <div className="sidebar__title">Price</div>
@@ -92,19 +131,20 @@ export const ShopCategoryPage = () => {
               <div className="filter-bar d-flex align-items-center flex-wrap">
                 <SelectBoxCustom
                   className="filter-bar__sort w-25"
-                  data={[{ key: 1, value: "Quan" }]}
-                  onSelectBoxChange={(value) => console.log(value)}
-                />
-                <SelectBoxCustom
-                  className="w-25 ms-3 me-auto"
-                  data={[{ key: 1, value: "Quan" }]}
-                  onSelectBoxChange={(value) => console.log(value)}
+                  data={sortOptions}
+                  selected={searchParams.sortPrice}
+                  handleSelected={(sortPrice) => {
+                    setSearchParams({ ...searchParams, sortPrice });
+                  }}
                 />
                 <Input
-                  className="filter-bar__search"
+                  className="filter-bar__search ms-auto"
                   bsSize="sm"
                   type="search"
                   placeholder="Search here..."
+                  onChange={(e) => {
+                    setSearchParams({ ...searchParams, name: e.target.value });
+                  }}
                 />
               </div>
               <ProductList products={products.data} xl="3" />
